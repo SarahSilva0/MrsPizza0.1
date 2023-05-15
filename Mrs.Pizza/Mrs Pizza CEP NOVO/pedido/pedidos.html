@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>mr pizza</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+  <header class="banner-header">
+    <img src="bannerMrs.png" alt="banner" class="banner-header">
+  </header>
+	<form>
+
+    <div class="checkbox">
+
+      <div id="barra" class="tamanho_bar">
+        <span class="frase">Tamanho</span>
+      </div>
+
+		<label for="tamanho_pequeno">Broto</label>
+		<input type="radio" id="tamanho_pequeno" name="tamanho" value="broto">
+		<label for="tamanho_medio">Grande</label>
+		<input type="radio" id="tamanho_grande" name="tamanho" value="grande">
+
+		
+		
+		
+     <div id="barra" class="bebidas_bar">
+        <span class="frase">Bebidas</span>
+     </div>
+
+    
+      <input type="radio" id="bebidas_refrigerante" name="bebidas" value="refrigerante">
+      <label for="bebidas_refrigerante">Refrigerante</label>
+      
+      <input type="radio" id="bebidas_suco" name="bebidas" value="suco">
+      <label for="bebidas_suco">Suco</label>
+      
+      <input type="radio" id="bebidas_cerveja" name="bebidas" value="cerveja">
+      <label for="bebidas_cerveja">Cerveja</label>
+      
+      <input type="radio" id="bebidas_agua" name="bebidas" value="agua">
+      <label for="bebidas_agua">Água</label>
+      
+      <input type="radio" id="bebidas_nenhuma" name="bebidas" value="nenhuma">
+      <label for="bebidas_nenhuma">Nenhuma</label>
+		
+    
+
+    </div>
+
+    <div id="endereco" class="endereco_bar">
+      <span class="frase">Endereço de Entrega</span>
+    </div> 
+    
+    <form method="get" action=".">
+      <label>Cep:
+      <input name="cep" type="text" id="cep" value="" size="10" maxlength="9"
+             onblur="pesquisacep(this.value);" /></label><br />
+      <label>Rua:
+      <input name="rua" type="text" id="rua" size="60" /></label><br />
+      <label>Número:
+        <input name="num" type="text" id="num" size="60" /></label><br />
+      <label>Bairro:
+      <input name="bairro" type="text" id="bairro" size="40" /></label><br />
+      <label>Cidade:
+      <input name="cidade" type="text" id="cidade" size="40" /></label><br />
+      <label>Estado:
+      <input name="uf" type="text" id="uf" size="2" /></label><br />
+    </form>
+    
+    <script>
+    function limpa_formulário_cep() {
+      //Limpa valores do formulário de cep.
+      document.getElementById('rua').value=("");
+      document.getElementById('bairro').value=("");
+      document.getElementById('cidade').value=("");
+      document.getElementById('uf').value=("");
+    }
+    
+    function meu_callback(conteudo) {
+      if (!("erro" in conteudo)) {
+        //Atualiza os campos com os valores.
+        document.getElementById('rua').value=(conteudo.logradouro);
+        document.getElementById('bairro').value=(conteudo.bairro);
+        document.getElementById('cidade').value=(conteudo.localidade);
+        document.getElementById('uf').value=(conteudo.uf);
+      } //end if.
+      else {
+        //CEP não Encontrado.
+        limpa_formulário_cep();
+        alert("CEP não encontrado.");
+      }
+    }
+        
+    function pesquisacep(valor) {
+    
+      //Nova variável "cep" somente com dígitos.
+      var cep = valor.replace(/\D/g, '');
+    
+      //Verifica se campo cep possui valor informado.
+      if (cep != "") {
+    
+        //Expressão regular para validar o CEP.
+        var validacep = /^[0-9]{8}$/;
+    
+        //Valida o formato do CEP.
+        if(validacep.test(cep)) {
+    
+          //Preenche os campos com "..." enquanto consulta webservice.
+          document.getElementById('rua').value="...";
+          document.getElementById('bairro').value="...";
+          document.getElementById('cidade').value="...";
+          document.getElementById('uf').value="...";
+    
+          //Cria um elemento javascript.
+          var script = document.createElement('script');
+    
+          //Sincroniza com o callback.
+          script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+    
+          //Insere script no documento e carrega o conteúdo.
+          document.body.appendChild(script);
+    
+        } //end if.
+        else {
+          //cep é inválido.
+          limpa_formulário_cep();
+          alert("Formato de CEP inválido.");
+        }
+      } //end if.
+      else {
+        //cep sem valor, limpa formulário.
+        limpa_formulário_cep();
+      }
+    };
+    </script>
+    
+      
+    </div>
+    
+		
+    <input type="submit" id="enviarpedido" value="Enviar pedido" class="btn-submit">
+  
+  </form>
+    <script>
+		document.getElementById("enviarpedido").addEventListener("click", function() {
+			alert("ERRO AO CONCLUIR O PEDIDO! TENTE NOVAMENTE");
+		});
+	</script>
+  <footer>
+    <p>&copy; 2023 - Todos os direitos reservados.</p>
+    </footer>
+   </body>
